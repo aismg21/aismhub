@@ -137,38 +137,49 @@ const PostEditor: React.FC<PostEditorProps> = ({ userId, templateUrl }) => {
         if (userDoc.exists()) {
           const data = userDoc.data();
 
-          // ---------- PHONE NUMBER LAYER ----------
-          if (data.phoneNumber) {
-            Image.fromURL("/icons/phone.png", { crossOrigin: "anonymous" }).then((icon: any) => {
-              const phoneText = new Textbox(data.phoneNumber, {
-                fontSize: 30 * scaleFactor,
-                fill: "#000",
-                textAlign: "left",
-                fontFamily: "Arial",
-                fontWeight: "bold",
-                stroke: "#fff",
-                strokeWidth: 2,
-                paintFirst: "stroke",
-                left: 40 * scaleFactor,
-                top: 0,
-                selectable: false,
-              });
+          
+// ---------- PHONE NUMBER LAYER ----------
 
-              const group = new Group([icon, phoneText], {
-                left: 20 * scaleFactor,
-                top: c.getHeight() - 50 * scaleFactor,
-                selectable: true,
-                hasControls: true,
-              });
-              (group as any).phoneLayer = true;
-              phoneGroupRef.current = group;
+Image.fromURL("/icons/phone.png", { crossOrigin: "anonymous" }).then((icon) => {
 
-              icon.scaleToWidth(35 * scaleFactor);
+  const iconSize = 32 * scaleFactor;
 
-              c.add(group);
-              c.renderAll();
-            });
-          }
+  icon.scaleToWidth(iconSize);
+
+  icon.set({
+    left: 0,
+    top: 0,
+    selectable: false,
+    evented: false,
+  });
+
+  const phoneText = new fabric.Textbox(data.phoneNumber, {
+    fontSize: 30 * scaleFactor,
+    fill: "#000",
+    stroke: "#fff",
+    strokeWidth: 2,
+    paintFirst: "stroke",
+    fontFamily: "Arial",
+    fontWeight: "bold",
+
+    left: iconSize + 10,  // icon ke right me
+    top: (iconSize - (35 * scaleFactor)) / 2,  
+    // ↑ IMPORTANT → text ko exactly icon ke center line pe lana
+    selectable: false,
+    evented: false,
+  });
+
+  const group = new fabric.Group([icon, phoneText], {
+    left: 20 * scaleFactor,
+    top: c.getHeight() - (50 * scaleFactor),
+    selectable: false,
+    evented: false,
+  });
+
+  c.add(group);
+  c.renderAll();
+});
+
 
           // ---------- SOCIAL ICONS ----------
           if (data.socialLinks) {
