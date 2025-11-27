@@ -332,22 +332,46 @@ const PostEditor: React.FC<PostEditorProps> = ({ userId, templateUrl }) => {
   };
 
   // -------------------- Upload Image --------------------
-  const handleImageUpload = (e: any) => {
-    if (!canvas) return;
-    const file = e.target.files[0];
-    if (!file) return;
+const handleImageUpload = (e: any) => {
+  if (!canvas) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (f: any) => {
-      const { Image } = await import("fabric");
-      Image.fromURL(f.target.result).then((img: any) => {
-        img.scaleToWidth(canvas.getWidth() / 2 );
+  const reader = new FileReader();
+  reader.onload = async (f: any) => {
+    const { Image } = await import("fabric");
+
+    Image.fromURL(f.target.result)
+      .then((img: any) => {
+        const TARGET_SIZE = 200; // new size 200x200
+
+        const w = img.width;
+        const h = img.height;
+
+        const scale = Math.min(TARGET_SIZE / w, TARGET_SIZE / h);
+
+        img.scale(scale);
+
+        // TOP-LEFT POSITION (with small padding)
+        img.set({
+          left: 20,
+          top: 20,
+        });
+
+        img.setCoords();
         canvas.add(img);
         canvas.renderAll();
+      })
+      .catch((err: any) => {
+        console.error("Image load error", err);
       });
-    };
-    reader.readAsDataURL(file);
   };
+
+  reader.readAsDataURL(file);
+};
+
+       
+ 
 
   // -------------------- Save --------------------
   const handleSave = async () => {
