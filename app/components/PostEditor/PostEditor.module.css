@@ -1,0 +1,138 @@
+/* CONTAINER */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  padding: 0 10px;
+  width: 100%;
+  position: relative;
+}
+
+/* TOP TOOLBAR */
+.topToolbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* LEFT GROUP */
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* RIGHT GROUP */
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* BUTTONS */
+.button {
+  padding: 8px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+/* INPUTS */
+.colorInput,
+.numberInput,
+.selectInput {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 35px;
+}
+
+/* CANVAS WRAPPER */
+.canvasWrapper {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #fdfdfd;
+  margin-top: 10px;
+  width: 100%;
+  max-width: fit-content;
+  display: flex;
+  justify-content: center;
+}
+
+.canvasWrapper canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* BOTTOM TOOLBAR */
+.bottomToolbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .topToolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .leftGroup,
+  .rightGroup {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .button {
+    font-size: 14px;
+    padding: 7px 12px;
+    
+  }
+
+  .numberInput,
+  .selectInput {
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .button {
+    width: auto !important;
+    text-align: center;
+  }
+
+  .leftGroup,
+  .rightGroup {
+    justify-content: center;
+  }
+
+  .selectInput {
+    width: 100%;
+  }
+
+  .numberInput {
+    width: 100%;
+  }
+}
+
