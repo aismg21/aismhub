@@ -15,7 +15,7 @@ export default function AdminLoginPage() {
     setError("");
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (userCredential.user.uid !== "nwIpLPLwtcWu5osZ5yUHBxmb3m83") {
+      if (userCredential.user.uid !== "jBxsQfq71XMqK3GltStXZXpFEeq1") {
         setError("You are not authorized as admin.");
         return;
       }
