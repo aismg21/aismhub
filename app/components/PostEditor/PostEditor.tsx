@@ -341,7 +341,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ userId, templateUrl }) => {
     reader.onload = async (f: any) => {
       const { Image } = await import("fabric");
       Image.fromURL(f.target.result).then((img: any) => {
-        img.scaleToWidth(canvas.getWidth() / 2);
+        img.scaleToWidth(canvas.getWidth() / 2 - 250);
         canvas.add(img);
         canvas.renderAll();
       });
