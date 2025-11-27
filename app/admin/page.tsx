@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   const [accessDenied, setAccessDenied] = useState(false);
   const router = useRouter();
 
-  const ADMIN_UIDS = ["nwIpLPLwtcWu5osZ5yUHBxmb3m83"]; // Add more admins
+  const ADMIN_UIDS = ["jBxsQfq71XMqK3GltStXZXpFEeq1"]; // Add more admins
 
   useEffect(() => {
     if (!loading) {

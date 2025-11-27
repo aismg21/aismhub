@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<any>(null);
 
   // ✅ Admin UID(s)
-  const ADMIN_UIDS = ["nwIpLPLwtcWu5osZ5yUHBxmb3m83"];
+  const ADMIN_UIDS = ["jBxsQfq71XMqK3GltStXZXpFEeq1"];
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
