@@ -96,13 +96,16 @@ const PostEditor: React.FC<PostEditorProps> = ({ userId, templateUrl }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getCanvasSize = () => {
-    if (typeof window === "undefined") return { w: 800, h: 800 };
-    if (window.innerWidth < 450) return { w: 300, h: 300 };
-    if (window.innerWidth < 768) return { w: 500, h: 500 };
-    return { w: 800, h: 800 };
-  };
+ const getCanvasSize = () => {
+  if (typeof window === "undefined") return { w: 800, h: 800 };
 
+  const width = window.innerWidth;
+
+  if (width <= 450) return { w: width - 20, h: width - 20 }; // almost full mobile width  
+  if (width <= 768) return { w: 500, h: 500 };
+  
+  return { w: 800, h: 800 };
+};
   // -------------------- Initialize Canvas --------------------
   useEffect(() => {
     if (isInitialized.current) return;
@@ -118,6 +121,33 @@ const PostEditor: React.FC<PostEditorProps> = ({ userId, templateUrl }) => {
         backgroundColor: "#fff",
       });
       setCanvas(c);
+      // 🔒 Prevent Objects From Leaving Canvas
+c.on("object:moving", function (e) {
+  const obj = e.target;
+  if (!obj) return;
+
+  const canvasWidth = c.getWidth();
+  const canvasHeight = c.getHeight();
+
+  obj.setCoords();
+
+  // LEFT LOCK
+  if (obj.left < 0) obj.left = 0;
+
+  // TOP LOCK
+  if (obj.top < 0) obj.top = 0;
+
+  // RIGHT LOCK
+  if (obj.left + obj.width * obj.scaleX > canvasWidth) {
+    obj.left = canvasWidth - obj.width * obj.scaleX;
+  }
+
+  // BOTTOM LOCK
+  if (obj.top + obj.height * obj.scaleY > canvasHeight) {
+    obj.top = canvasHeight - obj.height * obj.scaleY;
+  }
+});
+
 
       const scaleFactor = c.getWidth() / TEMPLATE_SIZE;
 
@@ -343,7 +373,9 @@ Image.fromURL("/icons/phone.png", { crossOrigin: "anonymous" }).then((icon) => {
   };
 
   // -------------------- Upload Image --------------------
-const handleImageUpload = (e: any) => {
+
+
+  const handleImageUpload = (e: any) => {
   if (!canvas) return;
   const file = e.target.files[0];
   if (!file) return;
