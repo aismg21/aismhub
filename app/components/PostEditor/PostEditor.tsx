@@ -257,6 +257,17 @@ Image.fromURL("/icons/phone.png", { crossOrigin: "anonymous" }).then((icon) => {
               originX: "right",
               originY: "bottom",
             });
+
+             // FIX: Lock position so it never moves
+  messageBox.set({
+    lockMovementX: true,
+    lockMovementY: true,
+    lockScalingX: true,
+    lockScalingY: true,
+    lockRotation: true,
+    hasControls: true,
+    selectable: true,
+  });
             (messageBox as any).messageLayer = true;
             messageTextRef.current = messageBox;
 
@@ -293,19 +304,7 @@ Image.fromURL("/icons/phone.png", { crossOrigin: "anonymous" }).then((icon) => {
           icon.scaleToWidth(35 * scaleFactor);
         }
 
-        // Resize message text
-        if (messageTextRef.current) {
-          const msg = messageTextRef.current;
-          msg.set({
-            left: c.getWidth() - 20 * scaleFactor,
-            top: c.getHeight() - 50 * scaleFactor,
-            fontSize: 25 * scaleFactor,
-            originX: "right",
-            originY: "bottom",
-            textAlign: "right",
-          });
-          msg.setCoords();
-        }
+       
 
         // Resize social icons
         if (socialIconsRef.current.length) {
