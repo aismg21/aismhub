@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import { collection, addDoc, updateDoc, doc, getDoc, getDocs, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  getDoc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
 
 interface TemplateModalProps {
   isOpen: boolean;
@@ -11,44 +19,51 @@ interface TemplateModalProps {
   onSuccess?: () => void;
 }
 
-export default function TemplateModal({ isOpen, onClose, templateId, onSuccess }: TemplateModalProps) {
+export default function TemplateModal({
+  isOpen,
+  onClose,
+  templateId,
+  onSuccess,
+}: TemplateModalProps) {
   const [title, setTitle] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
-  const [fileName, setFileName] = useState(""); // user sirf file name dale
-  const [imageUrl, setImageUrl] = useState("");
+  const [categories, setCategories] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [imageName, setImageName] = useState(""); // only file name
   const [loading, setLoading] = useState(false);
 
-  // Auto-generate imageUrl when fileName changes
-  useEffect(() => {
-    if (fileName.trim() === "") {
-      setImageUrl("");
-    } else {
-      setImageUrl(`templates/${fileName.trim()}.jpg`);
-    }
-  }, [fileName]);
+  // Base URL
+  const buildURL = (name: string) =>
+    `https://upnwgxcyyzwqmoyfnint.supabase.co/storage/v1/object/public/aismhub/templates/${name.endsWith(".jpg") ? name : name + ".jpg"}`;
 
   // Fetch categories
   const fetchCategories = async () => {
     const snapshot = await getDocs(collection(db, "categories"));
-    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as { id: string; name: string }[];
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as { id: string; name: string }[];
     setCategories(data);
   };
 
-  // Fetch template if editing
+  // Fetch template for editing
   const fetchTemplate = async () => {
     if (!templateId) return;
+
     const docRef = doc(db, "templates", templateId);
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       const data = docSnap.data();
+
       setTitle(data.title || "");
       setCategoryId(data.categoryId || "");
-      // extract file name from existing imageUrl
-      if (data.imageUrl) {
-        const parts = data.imageUrl.split("/"); 
-        setFileName(parts[parts.length - 1].replace(".jpg", ""));
-      }
+
+      // extract filename from URL
+      const parts = data.imageUrl.split("/");
+      const file = parts[parts.length - 1];
+      setImageName(file);
     }
   };
 
@@ -58,28 +73,32 @@ export default function TemplateModal({ isOpen, onClose, templateId, onSuccess }
     } else {
       setTitle("");
       setCategoryId("");
-      setFileName("");
-      setImageUrl("");
+      setImageName("");
     }
   }, [isOpen, templateId]);
 
   const handleSubmit = async () => {
-    if (!title.trim() || !categoryId || !fileName.trim()) {
-      alert("Please enter title, select category, and file name");
+    if (!title.trim() || !categoryId || !imageName.trim()) {
+      alert("Please enter title, select category, and enter file name");
       return;
     }
 
     setLoading(true);
+
     try {
       const catRef = doc(db, "categories", categoryId);
       const catSnap = await getDoc(catRef);
-      const categoryName = catSnap.exists() ? catSnap.data().name : "other";
+      const categoryName = catSnap.exists()
+        ? catSnap.data().name
+        : "other";
+
+      const finalUrl = buildURL(imageName.trim());
 
       const templateData = {
         title: title.trim(),
         categoryId,
         category: categoryName.toLowerCase(),
-        imageUrl: imageUrl.trim().replace("\\", "/"),
+        imageUrl: finalUrl,
         createdAt: serverTimestamp(),
       };
 
@@ -116,8 +135,17 @@ export default function TemplateModal({ isOpen, onClose, templateId, onSuccess }
         zIndex: 1000,
       }}
     >
-      <div style={{ backgroundColor: "#fff", padding: "20px", borderRadius: "8px", width: "300px" }}>
-        <h2 style={{ marginBottom: "10px" }}>{templateId ? "Edit Template" : "Add Template"}</h2>
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+          borderRadius: "8px",
+          width: "320px",
+        }}
+      >
+        <h2 style={{ marginBottom: "10px" }}>
+          {templateId ? "Edit Template" : "Add Template"}
+        </h2>
 
         <input
           value={title}
@@ -139,23 +167,37 @@ export default function TemplateModal({ isOpen, onClose, templateId, onSuccess }
           ))}
         </select>
 
+        {/* 🔥 Enter only FILE NAME */}
         <input
           type="text"
-          value={fileName}
-          onChange={(e) => setFileName(e.target.value)}
-          placeholder="Enter file name only"
+          value={imageName}
+          onChange={(e) => setImageName(e.target.value)}
+          placeholder="Enter file name (example: holi.jpg)"
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
         />
 
-        {imageUrl && (
+        {imageName && (
           <>
-            <p>Preview: {imageUrl}</p>
-            <img src={imageUrl.replace("\\", "/")} alt="Preview" style={{ width: "100%", marginBottom: "10px" }} />
+            <p style={{ fontSize: "12px" }}>Preview:</p>
+            <img
+              src={buildURL(imageName)}
+              alt="Preview"
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                borderRadius: "6px",
+                border: "1px solid #ddd",
+              }}
+            />
           </>
         )}
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-          <button onClick={onClose} disabled={loading}>Cancel</button>
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+        >
+          <button onClick={onClose} disabled={loading}>
+            Cancel
+          </button>
           <button onClick={handleSubmit} disabled={loading}>
             {loading ? "Saving..." : "Save"}
           </button>
