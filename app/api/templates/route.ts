@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export async function GET() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return NextResponse.json(
+      { error: "Supabase environment variables missing" },
+      { status: 500 }
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
   try {
     // STEP 1 — List files inside templates/
     const { data: files, error } = await supabase.storage
@@ -21,11 +28,11 @@ export async function GET() {
     }
 
     // STEP 2 — PUBLIC URL generate (no signing)
-    const publicUrlBase = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/aismhub/templates`;
+    const publicUrlBase = `${supabaseUrl}/storage/v1/object/public/aismhub/templates`;
 
     const response = files.map((file) => ({
       name: file.name,
-      url: `${publicUrlBase}/${file.name}`, // behaves like /public/templates/...
+      url: `${publicUrlBase}/${file.name}`,
     }));
 
     return NextResponse.json({ templates: response });
