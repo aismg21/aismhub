@@ -21,7 +21,7 @@ interface PostEditorProps {
 }
 
 // Custom fonts placed in /public/fonts (names should match filenames without extension)
-const CUSTOM_FONTS = ["ZINCOBC", "Rage", "MTCORSVA"];
+const CUSTOM_FONTS = ["ZINCOBC", "Rage", "MTCORSVA" ];
 
 // System fonts to show in dropdown
 const SYSTEM_FONTS = [
@@ -31,8 +31,8 @@ const SYSTEM_FONTS = [
   "Courier New",
   "Verdana",
   "Roboto",
-  "Poppins",
-  "Montserrat",
+  
+  
 ];
 
 const MAX_DAILY_DOWNLOADS = 2;
