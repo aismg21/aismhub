@@ -40,16 +40,19 @@ export default function Header() {
           <Image
             src="/aismhub-logo.png"
             alt="AiSMHub Logo"
-            width={134}      // <<< Logo size adjust
-            height={30}     // <<< Logo size adjust
+            width={134}
+            height={30}
             className="rounded-md"
           />
-          <span className="text-xl font-semibold"></span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-4 items-center">
           <Link href={homeLink} className="hover:underline">Home</Link>
+
+          {/* ✅ NEW ABOUT LINK */}
+          <Link href="/about" className="hover:underline">About</Link>
+
           {user && <Link href="/profile" className="hover:underline">Profile</Link>}
 
           {user ? (
@@ -96,7 +99,15 @@ export default function Header() {
             className="md:hidden bg-blue-600/90 text-white flex flex-col px-4 pb-4 space-y-2 overflow-hidden"
           >
             <Link href={homeLink} onClick={() => setMenuOpen(false)}>Home</Link>
-            {user && <Link href="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>}
+
+            {/* ✅ NEW ABOUT LINK */}
+            <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
+
+            {user && (
+              <Link href="/profile" onClick={() => setMenuOpen(false)}>
+                Profile
+              </Link>
+            )}
 
             {user ? (
               <motion.button
