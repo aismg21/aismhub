@@ -4,12 +4,12 @@ import "./globals.css";
 
 export const metadata = {
   title: {
-    default: "AiSMHub – AI Social Media Post Maker",
+    default: "AISMHub – Free AI Post Maker | No Subscription, Lifetime Free Tool",
     template: "%s | AiSMHub",
   },
 
   description:
-    "AiSMHub is an AI-powered social media post maker that helps you create festival posts, business promotions, quotes, invitations, marketing templates, and more in seconds.",
+    "AISMHub is a free AI-powered post maker to create festival posts, business ads, quotes, and marketing designs instantly—no subscription required.",
 
   keywords: [
     "AI post maker",
