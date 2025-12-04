@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /api/templates
+
+Sitemap: https://aismhub.com/sitemap.xml
