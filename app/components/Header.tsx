@@ -50,10 +50,8 @@ export default function Header() {
         <nav className="hidden md:flex space-x-4 items-center">
           <Link href={homeLink} className="hover:underline">Home</Link>
 
+          {/* ✅ NEW ABOUT LINK */}
           <Link href="/about" className="hover:underline">About</Link>
-
-          {/* ✅ Added Contact Page Link */}
-          <Link href="/contact" className="hover:underline">Contact Us</Link>
 
           {user && <Link href="/profile" className="hover:underline">Profile</Link>}
 
@@ -102,12 +100,8 @@ export default function Header() {
           >
             <Link href={homeLink} onClick={() => setMenuOpen(false)}>Home</Link>
 
+            {/* ✅ NEW ABOUT LINK */}
             <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
-
-            {/* ✅ Added Contact Page Link */}
-            <Link href="/contact" onClick={() => setMenuOpen(false)}>
-              Contact Us
-            </Link>
 
             {user && (
               <Link href="/profile" onClick={() => setMenuOpen(false)}>
