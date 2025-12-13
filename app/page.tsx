@@ -63,7 +63,9 @@ export default function LandingPage() {
     router.push(`/login?templateUrl=${encodeURIComponent(templateUrl)}`);
   };
 
-  const handleLoadMore = () => setVisibleCount((prev) => prev + 100);
+  const handleLoadMore = () => {
+  router.push("/login");
+};
 
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-br from-white to-blue-50 text-gray-800 overflow-hidden">
