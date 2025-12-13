@@ -177,7 +177,7 @@ export default function HomePage() {
 
       {/* Load More */}
       {visibleCount < filteredTemplates.length && (
-        <div className="flex justify-center my-100">
+        <div className="flex justify-center my-8">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
